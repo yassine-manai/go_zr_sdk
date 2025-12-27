@@ -1,0 +1,16 @@
+// Update your go.mod file
+module github.com/yourusername/your-package/v2
+
+// Then tag with v2 prefix
+git tag v2.0.0
+git push origin v2.0.0
+
+
+
+# Make changes
+git add .
+git commit -m "Add new feature"
+
+# Create new version
+git tag v1.2.0
+git push origin main --tags

@@ -42,7 +42,7 @@ func (s *Service) CreateContract(ctx context.Context, req models.CreateContractR
 	// Execute with retry
 	err := s.retryer.Do(ctx, func() error {
 		return s.httpClient.DoXML(
-			ctx, http.MethodPost, "/contracts", &contractDetail, &result)
+			ctx, http.MethodPost, models.ContractCustomerMedia, &contractDetail, &result)
 	})
 
 	if err != nil {

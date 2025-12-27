@@ -45,7 +45,3 @@ go.work
 # OS
 .DS_Store
 Thumbs.db
-
-# Config files (may contain secrets)
-config.local.yaml
-.env
