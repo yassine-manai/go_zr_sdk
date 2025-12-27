@@ -79,7 +79,7 @@ func TestNewClientWithInvalidConfig(t *testing.T) {
 
 func TestConfigBuilder(t *testing.T) {
 	cfg, err := config.NewBuilder().
-		WithUIConfig("https://api.example.com", "user", "test-key").
+		WithUIConfig("https://api.example.com", "user", "test-key", false).
 		//WithDBConfig("localhost", "testdb", "user", "pass", 5432).
 		WithTimeout(60 * time.Second).
 		Build()

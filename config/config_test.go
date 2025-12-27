@@ -94,7 +94,7 @@ func TestConfigValidation(t *testing.T) {
 
 func TestBuilder(t *testing.T) {
 	cfg, err := NewBuilder().
-		WithUIConfig("https://api.example.com", "6", "api-key-123").
+		WithUIConfig("https://api.example.com", "6", "api-key-123", false).
 		WithDBConfig("localhost", "testdb", "user", "pass", 5432).
 		WithTimeout(60 * time.Second).
 		Build()

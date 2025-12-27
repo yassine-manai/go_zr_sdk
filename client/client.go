@@ -16,11 +16,10 @@ import (
 
 // Client is the main SDK client
 type Client struct {
-	config             *config.Config
-	httpClient         *http.Client
-	dbConn             *sql.DB
-	logger             logger.Logger
-	insecureSkipVerify bool
+	config     *config.Config
+	httpClient *http.Client
+	dbConn     *sql.DB
+	logger     logger.Logger
 
 	// Services
 	Contract *contract.Service

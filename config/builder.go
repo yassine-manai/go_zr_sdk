@@ -15,10 +15,11 @@ func NewBuilder() *Builder {
 }
 
 // WithUIConfig sets UI configuration
-func (b *Builder) WithUIConfig(host, username, password string) *Builder {
+func (b *Builder) WithUIConfig(host, username, password string, insecureTLS bool) *Builder {
 	b.config.UI.Host = host
 	b.config.UI.Username = username
 	b.config.UI.Password = password
+	b.config.UI.InsecureSkipVerify = insecureTLS
 	return b
 }
 
