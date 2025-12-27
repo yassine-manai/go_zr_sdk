@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	internalhttp "github.com/yourcompany/thirdparty-sdk/internal/http"
-	"github.com/yourcompany/thirdparty-sdk/internal/retry"
-	"github.com/yourcompany/thirdparty-sdk/logger"
-	"github.com/yourcompany/thirdparty-sdk/models"
+	internalhttp "github.com/yassine-manai/go_zr_sdk/internal/http"
+	"github.com/yassine-manai/go_zr_sdk/internal/retry"
+	"github.com/yassine-manai/go_zr_sdk/logger"
+	"github.com/yassine-manai/go_zr_sdk/models"
 )
 
 // Service handles contract operations
@@ -42,12 +42,7 @@ func (s *Service) CreateContract(ctx context.Context, req models.CreateContractR
 	// Execute with retry
 	err := s.retryer.Do(ctx, func() error {
 		return s.httpClient.DoXML(
-			ctx,
-			http.MethodPost,
-			"/contracts",
-			&contractDetail,
-			&result,
-		)
+			ctx, http.MethodPost, "/contracts", &contractDetail, &result)
 	})
 
 	if err != nil {

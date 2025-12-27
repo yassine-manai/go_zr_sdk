@@ -10,7 +10,6 @@ type ContractDetail struct {
 	ContractNo         int                 `xml:"contractno,omitempty"`
 	Person             *Person             `xml:"person,omitempty"`
 	StdAddr            *StdAddr            `xml:"stdAddr,omitempty"`
-	PaymentInfo        *PaymentInfo        `xml:"paymentInfo,omitempty"`
 	Counting           int                 `xml:"counting,omitempty"`
 	Present            int                 `xml:"present,omitempty"`
 	Status             int                 `xml:"status,omitempty"`
@@ -62,26 +61,6 @@ type StdAddr struct {
 	Street  string `xml:"street"`
 	Town    string `xml:"town"`
 	Postbox string `xml:"postbox"`
-}
-
-// PaymentInfo represents payment information
-type PaymentInfo struct {
-	PaymentType int       `xml:"paymentType"`
-	BankAcct    *BankAcct `xml:"bankacct,omitempty"`
-	CCNo1       *CCInfo   `xml:"ccno1,omitempty"`
-	CCNo2       *CCInfo   `xml:"ccno2,omitempty"`
-}
-
-// BankAcct represents bank account information
-type BankAcct struct {
-	AcctNo                 string `xml:"acctno"`
-	BankCode               string `xml:"bankcode"`
-	BankName               string `xml:"bankname"`
-	SEPAMandatRef          string `xml:"sepamandatref"`
-	SEPAMandatDate         string `xml:"sepamandatdate"`
-	SEPAPreNotification    int    `xml:"sepaprenotification"`
-	SEPAIBAN               string `xml:"sepaiban"`
-	SEPACreditorIdentifier string `xml:"sepacreditoridentifier"`
 }
 
 // CCInfo represents credit card information

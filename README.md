@@ -1,10 +1,10 @@
-# ThirdParty SDK
+# ZR GOLANG SDK
 
-Go client library for interacting with ThirdParty services.
+Go client library for interacting with ZR services.
 
 ## Installation
 ```bash
-go get github.com/yourcompany/thirdparty-sdk
+go get github.com/yassine-manai/go_zr_sdk
 ```
 
 ## Quick Start

@@ -10,9 +10,9 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/yourcompany/thirdparty-sdk/config"
-	"github.com/yourcompany/thirdparty-sdk/errors"
-	"github.com/yourcompany/thirdparty-sdk/logger"
+	"github.com/yassine-manai/go_zr_sdk/config"
+	"github.com/yassine-manai/go_zr_sdk/errors"
+	"github.com/yassine-manai/go_zr_sdk/logger"
 )
 
 // Client wraps http.Client with additional functionality

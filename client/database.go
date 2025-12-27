@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/yourcompany/thirdparty-sdk/config"
-	"github.com/yourcompany/thirdparty-sdk/logger"
+	"github.com/yassine-manai/go_zr_sdk/config"
+	"github.com/yassine-manai/go_zr_sdk/logger"
 )
 
 // createDBConnection creates and configures database connection

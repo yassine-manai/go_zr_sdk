@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/yourcompany/thirdparty-sdk/config"
-	"github.com/yourcompany/thirdparty-sdk/errors"
-	internalhttp "github.com/yourcompany/thirdparty-sdk/internal/http"
-	internalretry "github.com/yourcompany/thirdparty-sdk/internal/retry"
-	"github.com/yourcompany/thirdparty-sdk/logger"
-	"github.com/yourcompany/thirdparty-sdk/ui/customer_media/contract"
+	"github.com/yassine-manai/go_zr_sdk/config"
+	"github.com/yassine-manai/go_zr_sdk/errors"
+	internalhttp "github.com/yassine-manai/go_zr_sdk/internal/http"
+	internalretry "github.com/yassine-manai/go_zr_sdk/internal/retry"
+	"github.com/yassine-manai/go_zr_sdk/logger"
+	"github.com/yassine-manai/go_zr_sdk/ui/customer_media/contract"
 )
 
 // Client is the main SDK client

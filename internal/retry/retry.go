@@ -6,9 +6,9 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/yourcompany/thirdparty-sdk/config"
-	"github.com/yourcompany/thirdparty-sdk/errors"
-	"github.com/yourcompany/thirdparty-sdk/logger"
+	"github.com/yassine-manai/go_zr_sdk/config"
+	"github.com/yassine-manai/go_zr_sdk/errors"
+	"github.com/yassine-manai/go_zr_sdk/logger"
 )
 
 // Retryer handles retry logic with exponential backoff

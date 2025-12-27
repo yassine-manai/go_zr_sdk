@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/yourcompany/thirdparty-sdk/config"
+	"github.com/yassine-manai/go_zr_sdk/config"
 )
 
 func TestNewClient(t *testing.T) {

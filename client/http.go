@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/yourcompany/thirdparty-sdk/config"
+	"github.com/yassine-manai/go_zr_sdk/config"
 )
 
 // createHTTPClient creates a configured HTTP client
