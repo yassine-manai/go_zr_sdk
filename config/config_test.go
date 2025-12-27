@@ -1,0 +1,113 @@
+package config
+
+import (
+	"testing"
+	"time"
+)
+
+func TestConfigValidation(t *testing.T) {
+	tests := []struct {
+		name    string
+		config  *Config
+		wantErr bool
+	}{
+		{
+			name: "valid config",
+			config: &Config{
+				UI: UIConfig{
+					Host:     "https://api.example.com",
+					Username: "test-key",
+				},
+				DB: DBConfig{
+					Host:     "localhost",
+					Port:     5432,
+					Database: "testdb",
+					Username: "user",
+					Password: "pass",
+				},
+				Timeout: 30 * time.Second,
+				RetryConfig: RetryConfig{
+					MaxRetries:     3,
+					InitialBackoff: 1 * time.Second,
+					MaxBackoff:     10 * time.Second,
+					Multiplier:     2.0,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "missing UI base URL",
+			config: &Config{
+				UI: UIConfig{
+					Username: "test-key",
+				},
+				DB: DBConfig{
+					Host:     "localhost",
+					Port:     5432,
+					Database: "testdb",
+					Username: "user",
+				},
+				Timeout: 30 * time.Second,
+				RetryConfig: RetryConfig{
+					MaxRetries:     3,
+					InitialBackoff: 1 * time.Second,
+					MaxBackoff:     10 * time.Second,
+					Multiplier:     2.0,
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "invalid timeout",
+			config: &Config{
+				UI: UIConfig{
+					Host:     "https://api.example.com",
+					Username: "test-key",
+				},
+				DB: DBConfig{
+					Host:     "localhost",
+					Port:     5432,
+					Database: "testdb",
+					Username: "user",
+				},
+				Timeout: 0,
+				RetryConfig: RetryConfig{
+					MaxRetries:     3,
+					InitialBackoff: 1 * time.Second,
+					MaxBackoff:     10 * time.Second,
+					Multiplier:     2.0,
+				},
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := tt.config.Validate()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Config.Validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestBuilder(t *testing.T) {
+	cfg, err := NewBuilder().
+		WithUIConfig("https://api.example.com", "6", "api-key-123").
+		WithDBConfig("localhost", "testdb", "user", "pass", 5432).
+		WithTimeout(60 * time.Second).
+		Build()
+
+	if err != nil {
+		t.Fatalf("Builder.Build() failed: %v", err)
+	}
+
+	if cfg.UI.Host != "https://api.example.com" {
+		t.Errorf("expected BaseURL = 'https://api.example.com', got %s", cfg.UI.Host)
+	}
+
+	if cfg.Timeout != 60*time.Second {
+		t.Errorf("expected Timeout = 60s, got %v", cfg.Timeout)
+	}
+}
