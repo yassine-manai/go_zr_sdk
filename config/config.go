@@ -22,11 +22,12 @@ type Config struct {
 
 // UIConfig contains UI service settings
 type UIConfig struct {
-	Host     string // "https://20.0.0.55:8443"
-	BasePath string // "/CustomerMediaWebService"
-	Username string // For Basic Auth
-	Password string // For Basic Auth
-	Timeout  time.Duration
+	Host               string // "https://20.0.0.55:8443"
+	BasePath           string // "/CustomerMediaWebService"
+	Username           string // For Basic Auth
+	Password           string // For Basic Auth
+	Timeout            time.Duration
+	InsecureSkipVerify bool
 }
 
 // DBConfig contains database settings

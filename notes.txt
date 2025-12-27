@@ -2,8 +2,8 @@
 module github.com/yourusername/your-package/v2
 
 // Then tag with v2 prefix
-git tag v2.0.0
-git push origin v2.0.0
+git tag v2.0.0                  // TAG 
+git push origin v2.0.0          // THEN PUSH
 
 
 

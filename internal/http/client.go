@@ -189,7 +189,6 @@ func (c *Client) addDefaultHeaders(req *http.Request) {
 
 	// Standard headers
 	req.Header.Set("Accept", "application/xml")
-	req.Header.Set("User-Agent", "thirdparty-sdk/1.0")
 
 	// Request ID if in context
 	if requestID := req.Context().Value("request_id"); requestID != nil {

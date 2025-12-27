@@ -16,10 +16,11 @@ import (
 
 // Client is the main SDK client
 type Client struct {
-	config     *config.Config
-	httpClient *http.Client
-	dbConn     *sql.DB
-	logger     logger.Logger
+	config             *config.Config
+	httpClient         *http.Client
+	dbConn             *sql.DB
+	logger             logger.Logger
+	insecureSkipVerify bool
 
 	// Services
 	Contract *contract.Service
@@ -27,6 +28,7 @@ type Client struct {
 
 // New creates a new SDK client
 func New(cfg *config.Config) (*Client, error) {
+
 	if cfg == nil {
 		return nil, errors.NewSDKError(
 			errors.ErrorTypeValidation,

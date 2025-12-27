@@ -1,6 +1,7 @@
 package client
 
 import (
+	"crypto/tls"
 	"net"
 	"net/http"
 	"time"
@@ -22,6 +23,9 @@ func createHTTPClient(cfg *config.Config) *http.Client {
 			MaxIdleConns:        100,
 			MaxIdleConnsPerHost: 10,
 			IdleConnTimeout:     90 * time.Second,
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: cfg.UI.InsecureSkipVerify,
+			},
 
 			// Timeouts
 			DialContext: (&net.Dialer{
@@ -31,9 +35,6 @@ func createHTTPClient(cfg *config.Config) *http.Client {
 			TLSHandshakeTimeout:   10 * time.Second,
 			ResponseHeaderTimeout: 10 * time.Second,
 			ExpectContinueTimeout: 1 * time.Second,
-
-			// Disable compression for better performance on local networks
-			DisableCompression: false,
 		},
 	}
 }
