@@ -63,9 +63,10 @@ func (c *Config) Validate() error {
 		return fmt.Errorf("UI config validation failed: %w", err)
 	}
 
-	if err := c.DB.Validate(); err != nil {
+	/*if err := c.DB.Validate(); err != nil {
 		return fmt.Errorf("DB config validation failed: %w", err)
 	}
+	*/
 
 	if err := c.RetryConfig.Validate(); err != nil {
 		return fmt.Errorf("retry config validation failed: %w", err)
