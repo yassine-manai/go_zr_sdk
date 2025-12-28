@@ -10,7 +10,7 @@ type Builder struct {
 // NewBuilder creates a new config builder with defaults
 func NewBuilder() *Builder {
 	return &Builder{
-		config: DefaultConfig(),
+		config: &Config{},
 	}
 }
 
@@ -30,7 +30,7 @@ func (b *Builder) WithUITimeout(timeout time.Duration) *Builder {
 }
 
 // WithDBConfig sets database configuration
-func (b *Builder) WithDBConfig(host, database, username, password string, port int) *Builder {
+func (b *Builder) WithDBConfig(host string, port int, database, username, password string) *Builder {
 	b.config.DB.Host = host
 	b.config.DB.Port = port
 	b.config.DB.Database = database
@@ -39,25 +39,9 @@ func (b *Builder) WithDBConfig(host, database, username, password string, port i
 	return b
 }
 
-// WithDBConnectionPool sets database connection pool settings
-func (b *Builder) WithDBConnectionPool(maxOpen, maxIdle int, maxLifetime time.Duration) *Builder {
-	b.config.DB.MaxOpenConns = maxOpen
-	b.config.DB.MaxIdleConns = maxIdle
-	b.config.DB.ConnMaxLifetime = maxLifetime
-	return b
-}
-
 // WithTimeout sets global timeout
 func (b *Builder) WithTimeout(timeout time.Duration) *Builder {
 	b.config.Timeout = timeout
-	return b
-}
-
-// WithRetry sets retry configuration
-func (b *Builder) WithRetry(maxRetries int, initialBackoff, maxBackoff time.Duration) *Builder {
-	b.config.RetryConfig.MaxRetries = maxRetries
-	b.config.RetryConfig.InitialBackoff = initialBackoff
-	b.config.RetryConfig.MaxBackoff = maxBackoff
 	return b
 }
 

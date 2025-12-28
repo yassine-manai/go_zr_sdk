@@ -5,9 +5,10 @@ import (
 	"fmt"
 
 	"github.com/yassine-manai/go_zr_sdk/config"
-	"github.com/yassine-manai/go_zr_sdk/logger"
+	"github.com/yassine-manai/go_zr_sdk/internal/logger"
 )
 
+// TODO : TO BE CHANGED TO ORACLE
 // createDBConnection creates and configures database connection
 func createDBConnection(cfg *config.Config, log logger.Logger) (*sql.DB, error) {
 	// Build connection string
@@ -24,11 +25,6 @@ func createDBConnection(cfg *config.Config, log logger.Logger) (*sql.DB, error) 
 	if err != nil {
 		return nil, err
 	}
-
-	// Configure connection pool
-	db.SetMaxOpenConns(cfg.DB.MaxOpenConns)
-	db.SetMaxIdleConns(cfg.DB.MaxIdleConns)
-	db.SetConnMaxLifetime(cfg.DB.ConnMaxLifetime)
 
 	// Test connection
 	if err := db.Ping(); err != nil {

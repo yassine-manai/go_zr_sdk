@@ -1,55 +1,52 @@
 package client
 
 import (
-	"context"
 	"database/sql"
-	"fmt"
 	"net/http"
 
 	"github.com/yassine-manai/go_zr_sdk/config"
-	"github.com/yassine-manai/go_zr_sdk/errors"
+	"github.com/yassine-manai/go_zr_sdk/internal/errors"
 	internalhttp "github.com/yassine-manai/go_zr_sdk/internal/http"
-	internalretry "github.com/yassine-manai/go_zr_sdk/internal/retry"
-	"github.com/yassine-manai/go_zr_sdk/logger"
+	"github.com/yassine-manai/go_zr_sdk/internal/logger"
 	"github.com/yassine-manai/go_zr_sdk/ui/customer_media/contract"
+	"github.com/yassine-manai/go_zr_sdk/ui/customer_media/participant"
 )
 
 // Client is the main SDK client
 type Client struct {
-	config     *config.Config
-	httpClient *http.Client
-	dbConn     *sql.DB
-	logger     logger.Logger
-
-	// Services
-	Contract *contract.Service
+	config     *config.Config // external config
+	httpClient *http.Client   // httpConnection helper
+	dbConn     *sql.DB        // dbConnection helper
+	logger     logger.Logger  // log Handler
+	UI         UI             // ZR UI's Handler
+	DB         DB             // ZR DB Handler
 }
 
+// UI Strct
+type UI struct {
+	CustomerMedia struct {
+		Contract    *contract.ContractService       // Contract Service
+		Participant *participant.ParticipantService // Participants Service
+	}
+}
+
+// DB stct
+type DB struct{}
+
 // New creates a new SDK client
-func New(cfg *config.Config) (*Client, error) {
+func NewZRClient(cfg *config.Config) (*Client, error) {
 
 	if cfg == nil {
-		return nil, errors.NewSDKError(
-			errors.ErrorTypeValidation,
-			"config cannot be nil",
-			nil,
-		)
+		return nil, errors.NewSDKError(errors.ErrorTypeValidation, "config cannot be nil", nil)
 	}
 
 	// Validate config
 	if err := cfg.Validate(); err != nil {
-		return nil, errors.NewSDKError(
-			errors.ErrorTypeValidation,
-			"invalid configuration",
-			err,
-		)
+		return nil, errors.NewSDKError(errors.ErrorTypeValidation, "invalid configuration", err)
 	}
 
-	// Create logger (UNCOMMENTED!)
+	// ================# init LOGGER helper #=====================//
 	log := createLogger(cfg)
-
-	// Create HTTP client
-	httpClient := createHTTPClient(cfg)
 
 	// Create database connection
 	/*dbConn, err := createDBConnection(cfg, log)
@@ -61,24 +58,23 @@ func New(cfg *config.Config) (*Client, error) {
 		)
 	}*/
 
-	// clients http + retry
+	// ================# init HTTP client/helper #=====================//
+	httpClient := createHTTPClient(cfg)
 	internalHTTPClient := internalhttp.NewClient(httpClient, cfg, log)
-	retryer := internalretry.New(cfg.RetryConfig, log)
-
-	var dbConn *sql.DB
 
 	client := &Client{
 		config:     cfg,
 		httpClient: httpClient,
-		dbConn:     dbConn,
-		logger:     log, // Assign to logger field
+		//dbConn:     dbConn,
+		logger: log,
 	}
 
-	client.Contract = contract.New(internalHTTPClient, retryer, log)
+	// ================# init Services #=====================//
+	client.UI.CustomerMedia.Contract = contract.NewContractService(internalHTTPClient, log)
+	client.UI.CustomerMedia.Participant = participant.NewParticipantService(internalHTTPClient, log)
+	// =====================================================//
 
-	log.Info("SDK client initialized successfully",
-		logger.String("ui_host", cfg.UI.Host),
-	)
+	log.Info("SDK client initialized successfully", logger.String("ui_host", cfg.UI.Host))
 
 	return client, nil
 }
@@ -102,66 +98,6 @@ func (c *Client) Close() error {
 	}
 
 	c.logger.Info("SDK client closed successfully") // Fixed: c.logger
-	return nil
-}
-
-// Ping checks connectivity to all services
-func (c *Client) Ping(ctx context.Context) error {
-	// Ping UI service
-	if err := c.pingUI(ctx); err != nil {
-		return err
-	}
-
-	// Ping database
-	if err := c.pingDB(ctx); err != nil {
-		return err
-	}
-
-	c.logger.Info("ping successful") // Fixed: c.logger
-	return nil
-}
-
-// pingUI checks UI service connectivity
-func (c *Client) pingUI(ctx context.Context) error {
-	req, err := http.NewRequestWithContext(
-		ctx,
-		http.MethodGet,
-		c.config.UI.Host+"/health", // Fixed: BaseURL not Host
-		nil,
-	)
-	if err != nil {
-		return errors.NewNetworkError("failed to create ping request", err)
-	}
-
-	req.Header.Set("Authorization", "Bearer "+c.config.UI.Host) // Fixed: APIKey not Username
-
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return errors.NewNetworkError("UI service ping failed", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return errors.NewServiceUnavailableError(
-			fmt.Sprintf("UI service returned status %d", resp.StatusCode),
-			"ui-service",
-			0,
-		)
-	}
-
-	return nil
-}
-
-// pingDB checks database connectivity
-func (c *Client) pingDB(ctx context.Context) error {
-	if err := c.dbConn.PingContext(ctx); err != nil {
-		return errors.NewDatabaseError(
-			"database ping failed",
-			"",
-			"PING",
-			err,
-		)
-	}
 	return nil
 }
 

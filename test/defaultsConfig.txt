@@ -21,11 +21,8 @@ func DefaultConfig() *Config {
 		},
 
 		DB: DBConfig{
-			Port:            5432,
-			MaxOpenConns:    25,
-			MaxIdleConns:    5,
-			ConnMaxLifetime: 5 * time.Minute,
-			SSLMode:         "require",
+			Port:    5432,
+			SSLMode: true,
 		},
 	}
 }

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/xml"
 	"time"
 )
 
@@ -19,29 +20,6 @@ func Now() Timestamp {
 	return Timestamp{Time: time.Now()}
 }
 
-// MarshalJSON implements json.Marshaler
-func (t Timestamp) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + t.Format(time.RFC3339) + `"`), nil
-}
-
-// UnmarshalJSON implements json.Unmarshaler
-func (t *Timestamp) UnmarshalJSON(data []byte) error {
-	// Remove quotes
-	str := string(data)
-	if len(str) < 2 {
-		return nil
-	}
-	str = str[1 : len(str)-1]
-
-	parsed, err := time.Parse(time.RFC3339, str)
-	if err != nil {
-		return err
-	}
-
-	t.Time = parsed
-	return nil
-}
-
 // Metadata contains common metadata for responses
 type Metadata struct {
 	RequestID string    `json:"request_id,omitempty"`
@@ -56,4 +34,15 @@ func NewMetadata(requestID string) Metadata {
 		Timestamp: Now(),
 		Version:   "v1",
 	}
+}
+
+// ErrorResponse represents XML error response from API
+type ErrorResponse struct {
+	XMLName xml.Name `xml:"http://gsph.sub.com/cust/types errorResponse"`
+	Error   struct {
+		ErrCode      string `xml:"errCode"`
+		ShortMsg     string `xml:"shortMsg"`
+		Message      string `xml:"message"`
+		CauseMessage string `xml:"causeMessage"`
+	} `xml:"error"`
 }

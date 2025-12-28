@@ -4,9 +4,9 @@ import "fmt"
 
 // ValidationError represents validation failures
 type ValidationError struct {
-	Field   string      // Field that failed validation
-	Message string      // Validation error message
-	Value   interface{} // The invalid value
+	Field   string // Field that failed validation
+	Message string // Validation error message
+	Value   any    // The invalid value
 }
 
 // Error implements the error interface

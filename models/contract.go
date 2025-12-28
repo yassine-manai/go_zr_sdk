@@ -22,12 +22,13 @@ type ContractDetail struct {
 
 // Contract represents the basic contract info
 type Contract struct {
-	Href       string `xml:"href,attr,omitempty"`
-	ID         *int   `xml:"id,omitempty"`
-	Name       string `xml:"name"`
-	ValidFrom  string `xml:"xValidFrom"`
-	ValidUntil string `xml:"xValidUntil"`
-	FilialID   string `xml:"filialId,omitempty"`
+	Href       string   `xml:"href,attr,omitempty"`
+	ID         *int     `xml:"id,omitempty"`
+	Name       string   `xml:"name"`
+	ValidFrom  string   `xml:"xValidFrom"`
+	ValidUntil string   `xml:"xValidUntil"`
+	FilialID   string   `xml:"filialId,omitempty"`
+	StdAddr    *StdAddr `xml:"stdAddr,omitempty"`
 }
 
 // ContractAttributes represents contract attributes
@@ -72,32 +73,39 @@ type CCInfo struct {
 }
 
 // CreateContractRequest for creating a new contract
-type CreateContractRequest struct {
+type ContractRequest struct {
 	ID         *int   // Optional - nil if 3rd party should generate
 	Name       string // Required
 	ValidFrom  string // Required - Format: "2021-01-01"
 	ValidUntil string // Required - Format: "2021-12-31"
+	StdAddr    *StdAddr
+}
+
+// Contracts represents the root XML element containing multiple contracts
+type Contracts struct {
+	XMLName  xml.Name       `xml:"http://gsph.sub.com/cust/types contracts"`
+	Contract []ContractList `xml:"contract"`
+}
+
+// Contract represents a single contract in the list
+type ContractList struct {
+	XMLName    xml.Name `xml:"contract"`
+	ID         int      `xml:"id"`
+	Name       string   `xml:"name"`
+	ValidFrom  string   `xml:"xValidFrom"`
+	ValidUntil string   `xml:"xValidUntil"`
+	FilialID   string   `xml:"filialId"`
 }
 
 // ToXML converts CreateContractRequest to ContractDetail for XML marshaling
-func (r CreateContractRequest) ToXML() ContractDetail {
+func (r ContractRequest) ToXML() ContractDetail {
 	return ContractDetail{
 		Contract: Contract{
 			ID:         r.ID,
 			Name:       r.Name,
 			ValidFrom:  r.ValidFrom,
 			ValidUntil: r.ValidUntil,
+			StdAddr:    r.StdAddr,
 		},
 	}
-}
-
-// ErrorResponse represents XML error response from API
-type ErrorResponse struct {
-	XMLName xml.Name `xml:"http://gsph.sub.com/cust/types errorResponse"`
-	Error   struct {
-		ErrCode      string `xml:"errCode"`
-		ShortMsg     string `xml:"shortMsg"`
-		Message      string `xml:"message"`
-		CauseMessage string `xml:"causeMessage"`
-	} `xml:"error"`
 }

@@ -47,7 +47,7 @@ type Logger interface {
 	// Error logs an error message
 	Error(msg string, fields ...Field)
 
-	// Error logs an error message
+	// Error logs an Trace message
 	Trace(msg string, fields ...Field)
 
 	// With creates a child logger with additional fields
